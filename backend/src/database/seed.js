@@ -13,7 +13,7 @@ const pool = createPool({
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASS || '',
-  database: process.env.DB_NAME || 'mys_platform',
+  database: process.env.DB_NAME || 'theplatform',
 });
 
 const SUPER_ADMIN = {

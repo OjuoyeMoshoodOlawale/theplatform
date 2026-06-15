@@ -4,9 +4,9 @@
 -- Always drop and re-run for a clean install — no migrations.
 -- =============================================================
 
-CREATE DATABASE IF NOT EXISTS mys_platform
+CREATE DATABASE IF NOT EXISTS theplatform
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE mys_platform;
+USE theplatform;
 
 SET FOREIGN_KEY_CHECKS = 0;
 

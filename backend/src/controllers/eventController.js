@@ -627,7 +627,7 @@ async function enrichEvent(eventId, event) {
     );
     stats = s || stats;
   } catch {
-    // balance_due column may not exist on older DBs — run migrate.sql
+    // balance_due column should exist in the full schema; fall back defensively
     try {
       const [[s]] = await query(
         `SELECT SUM(status='paid') AS total_sold,

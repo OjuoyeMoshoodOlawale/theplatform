@@ -54,7 +54,7 @@ async function setup() {
   console.log('║   MYS Platform — Demo Setup                  ║');
   console.log('╚══════════════════════════════════════════════╝\n');
 
-  const DB = process.env.DB_NAME || 'mys_platform';
+  const DB = process.env.DB_NAME || 'theplatform';
 
   /* 1. Drop + recreate database */
   console.log(`🗑️  Resetting database '${DB}'…`);

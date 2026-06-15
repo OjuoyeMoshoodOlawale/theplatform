@@ -15,7 +15,7 @@ const pool = createPool({
   port:               parseInt(process.env.DB_PORT || '3306'),
   user:               process.env.DB_USER    || 'root',
   password:           process.env.DB_PASS    || '',
-  database:           process.env.DB_NAME    || 'mys_platform',
+  database:           process.env.DB_NAME    || 'theplatform',
   multipleStatements: true,
   waitForConnections: true,
   dateStrings:        true,
@@ -687,7 +687,7 @@ Attendees will benefit from:
   console.log('  • 6 sponsors with logo URLs (clearbit + Unsplash)');
   console.log('\n  SETUP COMMAND:');
   console.log('  mysql -u root -p');
-  console.log('  DROP DATABASE IF EXISTS mys_platform;');
+  console.log('  DROP DATABASE IF EXISTS theplatform;');
   console.log('  SOURCE backend/src/database/schema.sql;');
   console.log('  exit');
   console.log('  cd backend && node src/database/seed.js && npm run demo');

@@ -7,7 +7,7 @@ export const validateEnv = () => {
   // These MUST exist — app cannot function without them
   const required = [
     ['DB_HOST',     'Database host (e.g. localhost)'],
-    ['DB_NAME',     'Database name (e.g. mys_platform)'],
+    ['DB_NAME',     'Database name (e.g. theplatform)'],
     ['DB_USER',     'Database username'],
     ['JWT_SECRET',  'JWT signing secret (min 32 chars)'],
   ];
