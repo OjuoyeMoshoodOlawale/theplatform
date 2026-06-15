@@ -1,0 +1,20 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Uploads (local files — use cloud storage in production)
+uploads/
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

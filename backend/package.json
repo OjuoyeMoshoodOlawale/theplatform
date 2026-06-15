@@ -1,0 +1,39 @@
+{
+  "name": "mys-platform-backend",
+  "version": "2.0.0",
+  "description": "Muslim Youth Summit Platform — Express API",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "seed": "node src/database/seed.js",
+    "demo": "node src/database/seed.demo.js",
+    "db": "node -e \"import('./src/database/db.js').then(m=>m.query('SELECT 1+1 AS ok')).then(([r])=>console.log('DB OK:',r[0])).catch(e=>console.error('DB FAIL:',e.message))\"",
+    "seed:admin": "node scripts/seed-admin.js",
+    "setup:demo": "node scripts/setup-demo.js",
+    "setup": "node scripts/setup-demo.js",
+    "setup:tenant": "node scripts/setup-tenant.js",
+    "test:tenant": "node scripts/test-tenant-isolation.js",
+    "test:email": "node scripts/test-email.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.5",
+    "nodemailer": "^6.9.7",
+    "qrcode": "^1.5.3",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
