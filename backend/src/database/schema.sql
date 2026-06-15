@@ -178,8 +178,7 @@ CREATE TABLE IF NOT EXISTS participants (
   updated_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Fast lookup (not UNIQUE — family members share email with different names)
-CREATE INDEX idx_participants_email ON participants(email);
+-- Fast lookup index for participants(email) is created in the INDEXES section below.
 
 -- =============================================================
 -- 10. TICKETS
@@ -452,30 +451,74 @@ CREATE TABLE IF NOT EXISTS facilitator_reminders (
   FOREIGN KEY (lecture_id) REFERENCES lectures(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- =============================================================
--- 21. INDEXES  (all in one block for easy reference)
--- =============================================================
-CREATE INDEX idx_events_status        ON events(status);
-CREATE INDEX idx_events_edition       ON events(edition);
-CREATE INDEX idx_tickets_event        ON tickets(event_id);
-CREATE INDEX idx_tickets_participant  ON tickets(participant_id);
-CREATE INDEX idx_tickets_status       ON tickets(status);
-CREATE INDEX idx_tickets_category     ON tickets(category_id);
-CREATE INDEX idx_attendance_event     ON attendance(event_id);
-CREATE INDEX idx_attendance_checkin   ON attendance(checked_in_at);
-CREATE INDEX idx_event_tags_event     ON event_tags(event_id);
-CREATE INDEX idx_gallery_event        ON event_gallery(event_id, sort_order);
-CREATE INDEX idx_hostels_active       ON hostels(is_active, gender);
-CREATE INDEX idx_hostel_assignments   ON hostel_assignments(event_id, hostel_id);
-CREATE INDEX idx_expenses_status      ON expense_requests(status, created_at DESC);
-CREATE INDEX idx_expenses_dept        ON expense_requests(department_id, status);
-CREATE INDEX idx_categories_active    ON event_categories(is_active, sort_order);
-CREATE INDEX idx_speakers_event       ON speakers(event_id);
-CREATE INDEX idx_lectures_event_day   ON lectures(event_id, event_day_id, s_n);
-CREATE INDEX idx_ticket_types_event   ON ticket_types(event_id, is_active, sort_order);
-CREATE INDEX idx_souvenirs_event      ON souvenirs(event_id, is_active);
-CREATE INDEX idx_souvenir_orders      ON souvenir_orders(souvenir_id, status);
-CREATE INDEX idx_souvenir_buyer       ON souvenir_orders(buyer_email);
-CREATE INDEX idx_sponsors_event       ON sponsors(event_id, is_active, sort_order);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- =============================================================
+-- 21. INDEXES  (idempotent — safe to re-run; skips if already present)
+-- =============================================================
+DROP PROCEDURE IF EXISTS AddIndexIfNotExists;
+DELIMITER $$
+CREATE PROCEDURE AddIndexIfNotExists(
+  IN tbl  VARCHAR(64),
+  IN idx  VARCHAR(64),
+  IN cols VARCHAR(255)
+)
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.STATISTICS
+    WHERE table_schema = DATABASE() AND table_name = tbl AND index_name = idx
+  ) THEN
+    SET @ddl = CONCAT('CREATE INDEX ', idx, ' ON ', tbl, '(', cols, ')');
+    PREPARE st FROM @ddl; EXECUTE st; DEALLOCATE PREPARE st;
+  END IF;
+END$$
+DELIMITER ;
+
+CALL AddIndexIfNotExists('participants', 'idx_participants_email', 'email');
+CALL AddIndexIfNotExists('events', 'idx_events_status', 'status');
+CALL AddIndexIfNotExists('events', 'idx_events_edition', 'edition');
+CALL AddIndexIfNotExists('tickets', 'idx_tickets_event', 'event_id');
+CALL AddIndexIfNotExists('tickets', 'idx_tickets_participant', 'participant_id');
+CALL AddIndexIfNotExists('tickets', 'idx_tickets_status', 'status');
+CALL AddIndexIfNotExists('tickets', 'idx_tickets_category', 'category_id');
+CALL AddIndexIfNotExists('attendance', 'idx_attendance_event', 'event_id');
+CALL AddIndexIfNotExists('attendance', 'idx_attendance_checkin', 'checked_in_at');
+CALL AddIndexIfNotExists('event_tags', 'idx_event_tags_event', 'event_id');
+CALL AddIndexIfNotExists('event_gallery', 'idx_gallery_event', 'event_id, sort_order');
+CALL AddIndexIfNotExists('hostels', 'idx_hostels_active', 'is_active, gender');
+CALL AddIndexIfNotExists('hostel_assignments', 'idx_hostel_assignments', 'event_id, hostel_id');
+CALL AddIndexIfNotExists('expense_requests', 'idx_expenses_status', 'status, created_at DESC');
+CALL AddIndexIfNotExists('expense_requests', 'idx_expenses_dept', 'department_id, status');
+CALL AddIndexIfNotExists('event_categories', 'idx_categories_active', 'is_active, sort_order');
+CALL AddIndexIfNotExists('speakers', 'idx_speakers_event', 'event_id');
+CALL AddIndexIfNotExists('lectures', 'idx_lectures_event_day', 'event_id, event_day_id, s_n');
+CALL AddIndexIfNotExists('ticket_types', 'idx_ticket_types_event', 'event_id, is_active, sort_order');
+CALL AddIndexIfNotExists('souvenirs', 'idx_souvenirs_event', 'event_id, is_active');
+CALL AddIndexIfNotExists('souvenir_orders', 'idx_souvenir_orders', 'souvenir_id, status');
+CALL AddIndexIfNotExists('souvenir_orders', 'idx_souvenir_buyer', 'buyer_email');
+CALL AddIndexIfNotExists('sponsors', 'idx_sponsors_event', 'event_id, is_active, sort_order');
+
+DROP PROCEDURE IF EXISTS AddIndexIfNotExists;

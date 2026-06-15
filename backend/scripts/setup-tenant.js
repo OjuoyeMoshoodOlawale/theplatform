@@ -20,7 +20,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const run = async () => {
   console.log('🏗️  Multi-tenant setup starting…\n');
-  console.log(`   DB: ${process.env.DB_NAME || 'event_platform'} @ ${process.env.DB_HOST || 'localhost'}\n`);
+  console.log(`   DB: ${process.env.DB_NAME || 'theplatform'} @ ${process.env.DB_HOST || 'localhost'}\n`);
 
   // 0. Guard: the base schema (events, admins, participants…) must already
   //    exist — tenant-schema only ADDS tenant columns to those tables. If the
@@ -33,15 +33,15 @@ const run = async () => {
     if (!chk || chk.n < 3) {
       console.error('❌ Base tables (events/admins/participants) not found in this DB.');
       console.error('   Load the base schema into the platform DB first, e.g.:');
-      console.error('     mysql -u root -p ' + (process.env.DB_NAME || 'event_platform') + ' < src/database/schema.sql');
+      console.error('     mysql -u root -p ' + (process.env.DB_NAME || 'theplatform') + ' < src/database/schema.sql');
       console.error('   Then re-run: npm run setup:tenant\n');
       process.exit(1);
     }
   } catch (e) {
-    console.error('❌ Cannot reach the database "' + (process.env.DB_NAME || 'event_platform') + '".');
+    console.error('❌ Cannot reach the database "' + (process.env.DB_NAME || 'theplatform') + '".');
     console.error('   Create it and load the base schema first:');
-    console.error('     mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS ' + (process.env.DB_NAME || 'event_platform') + '"');
-    console.error('     mysql -u root -p ' + (process.env.DB_NAME || 'event_platform') + ' < src/database/schema.sql');
+    console.error('     mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS ' + (process.env.DB_NAME || 'theplatform') + '"');
+    console.error('     mysql -u root -p ' + (process.env.DB_NAME || 'theplatform') + ' < src/database/schema.sql');
     console.error('   (' + e.message + ')\n');
     process.exit(1);
   }

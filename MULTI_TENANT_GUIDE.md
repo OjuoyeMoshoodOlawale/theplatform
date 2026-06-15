@@ -29,20 +29,20 @@ hostels, reports — all isolated to that tenant.
 
 ## First-time setup
 
-> ⚠️ **Separate database.** The platform uses its OWN database (`event_platform`),
+> ⚠️ **Separate database.** The platform uses its OWN database (`theplatform`),
 > not the MYS database (`mys_platform`). Never run `setup:tenant` against the MYS
-> production DB. Copy `.env.example` → `.env` and set `DB_NAME=event_platform`.
+> production DB. Copy `.env.example` → `.env` and set `DB_NAME=theplatform`.
 
 ```bash
 # 1. Backend
 cd backend
 npm install
-cp .env.example .env          # then edit: DB_NAME=event_platform, JWT_SECRET, etc.
+cp .env.example .env          # then edit: DB_NAME=theplatform, JWT_SECRET, etc.
 
 #    Create the platform DB and load the BASE schema into it first
 #    (tenant-schema only ADDS tenant columns to existing tables):
-mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS event_platform"
-mysql -u root -p event_platform < src/database/schema.sql
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS theplatform"
+mysql -u root -p theplatform < src/database/schema.sql
 
 #    Then create the tenants layer + seed platform admin + mys & icp tenants
 #    + backfill base rows to the "mys" tenant:
