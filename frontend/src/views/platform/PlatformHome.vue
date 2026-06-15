@@ -38,11 +38,11 @@
         <div class="mt-9 w-full max-w-md animate-rise" style="animation-delay:.2s">
           <label class="sr-only" for="slug">Your organisation's address</label>
           <div class="flex items-stretch rounded-xl overflow-hidden ring-1 ring-white/15 backdrop-blur-md bg-white/5">
-            <span class="px-3.5 flex items-center text-white/40 text-sm font-mono border-r border-white/10">theplatform.ng/</span>
+            <span class="shrink-0 px-3 flex items-center text-white/40 text-xs sm:text-sm font-mono border-r border-white/10 whitespace-nowrap">theplatform.ng/</span>
             <input id="slug" v-model="slug" @keyup.enter="go"
-              class="flex-1 bg-transparent px-3 py-3.5 outline-none text-white font-mono placeholder-white/30"
-              placeholder="your-organisation" />
-            <button class="bg-brand-gold text-brand-green font-bold px-6 hover:brightness-110 transition" @click="go">
+              class="flex-1 min-w-0 bg-transparent px-3 py-3.5 outline-none text-white font-mono placeholder-white/30"
+              placeholder="your-org" />
+            <button class="shrink-0 bg-brand-gold text-brand-green font-bold px-5 sm:px-6 whitespace-nowrap hover:brightness-110 transition" @click="go">
               Enter
             </button>
           </div>
