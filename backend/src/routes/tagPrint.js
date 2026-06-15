@@ -112,7 +112,7 @@ router.get('/events/:eventId/tags/print', authenticate, async (req, res, next) =
       <div class="badge">
         <!-- Brand header -->
         <div class="badge-header">
-          <img src="${BASE_URL}/logos/logo-white.png" class="badge-logo" alt="MYS" />
+          <img src="${event.logo_url || `${BASE_URL}/logos/logo-white.png`}" class="badge-logo" alt="${event.title || 'Event'}" />
           <div class="badge-edition">${event.edition || 'MYS'}</div>
           <div class="badge-event-title">${event.title || 'Muslim Youth Summit'}</div>
         </div>

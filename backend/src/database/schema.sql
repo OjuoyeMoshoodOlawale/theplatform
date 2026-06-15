@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS events (
   end_date             DATE NOT NULL,
   early_bird_closes_at DATETIME     COMMENT 'Early bird pricing ends at this datetime',
   cover_image_url      VARCHAR(500),
+  logo_url             VARCHAR(500) COMMENT 'Per-event logo; falls back to platform default if null',
   created_by           INT UNSIGNED NOT NULL,
   created_at           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at           DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

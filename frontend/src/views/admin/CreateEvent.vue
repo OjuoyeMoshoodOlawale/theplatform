@@ -31,6 +31,20 @@
               <label class="label">Tagline</label>
               <input v-model="form.tagline" class="input" placeholder="Short inspiring tagline" />
             </div>
+            <div>
+              <label class="label">Event logo URL</label>
+              <input v-model="form.logo_url" class="input" placeholder="https://…/your-logo.png" />
+              <p class="text-xs text-gray-400 mt-1">Shown on tickets, tags, certificates and the event page. Leave blank to use the default.</p>
+            </div>
+            <div>
+              <label class="label">Cover image URL</label>
+              <input v-model="form.cover_image_url" class="input" placeholder="https://…/cover.jpg" />
+              <p class="text-xs text-gray-400 mt-1">Large banner image for the event landing page.</p>
+            </div>
+            <div v-if="form.logo_url" class="md:col-span-2 flex items-center gap-3">
+              <span class="text-xs text-gray-400">Logo preview:</span>
+              <img :src="form.logo_url" alt="logo preview" class="h-10 rounded bg-brand-green/5 object-contain" @error="$event.target.style.display='none'" />
+            </div>
             <div class="md:col-span-2">
               <label class="label">Description</label>
               <textarea v-model="form.description" class="input" rows="4" placeholder="Full event description…"></textarea>
@@ -118,6 +132,7 @@ const saving  = ref(false);
 const form = reactive({
   title: '', edition: '', ticket_prefix: '', tagline: '', description: '',
   venue: '', start_date: '', end_date: '', early_bird_closes_at: '',
+  logo_url: '', cover_image_url: '',
   ticket_types: [{ name: 'Regular', regular_price: 0, early_bird_price: '', quantity_available: '' }],
 });
 const errs = reactive({ title:'', edition:'', start_date:'', end_date:'' });

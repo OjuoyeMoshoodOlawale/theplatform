@@ -566,7 +566,10 @@ const router     = useRouter();
 const eventStore = useEventStore();
 const tenantStore = useTenantStore();
 const orgName = computed(() => tenantStore.tenant?.name || 'Muslim Youth Summit');
-const orgLogo = computed(() => tenantStore.tenant?.logo_url || '/logos/logo-white.png');
+const orgLogo = computed(() =>
+  eventStore.activeEvent?.logo_url
+  || tenantStore.tenant?.logo_url
+  || '/logos/logo-white.png');
 const { setupReveal } = useScrollReveal();
 
 const scrolled       = ref(false);

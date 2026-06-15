@@ -222,6 +222,7 @@ export const createEvent = async (req, res, next) => {
       title, tagline, edition, description,
       start_date, end_date,
       venue, venue_address, early_bird_closes_at,
+      logo_url, cover_image_url,
       ticket_types = [],
     } = req.body;
 
@@ -232,12 +233,13 @@ export const createEvent = async (req, res, next) => {
     const [result] = await query(
       `INSERT INTO events
         (title, tagline, edition, slug, description, start_date, end_date,
-         venue, venue_address, early_bird_closes_at, status, created_by, tenant_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?)`,
+         venue, venue_address, early_bird_closes_at, logo_url, cover_image_url, status, created_by, tenant_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?)`,
       [
         title, tagline || null, edition, slug, description || null,
         start_date, end_date,
         venue || null, venue_address || null, early_bird_closes_at || null,
+        logo_url || null, cover_image_url || null,
         req.admin.id, stampId(req),
       ]
     );
@@ -269,6 +271,7 @@ export const updateEvent = async (req, res, next) => {
       title, tagline, edition, description,
       start_date, end_date,
       venue, venue_address, early_bird_closes_at,
+      logo_url, cover_image_url,
     } = req.body;
 
     const tU = tenantWhere(req, '');
@@ -280,12 +283,14 @@ export const updateEvent = async (req, res, next) => {
          title = ?, tagline = ?, edition = ?, description = ?,
          start_date = ?, end_date = ?,
          venue = ?, venue_address = ?, early_bird_closes_at = ?,
+         logo_url = ?, cover_image_url = ?,
          updated_at = NOW()
        WHERE id = ?`,
       [
         title, tagline || null, edition, description || null,
         start_date, end_date,
         venue || null, venue_address || null, early_bird_closes_at || null,
+        logo_url || null, cover_image_url || null,
         id,
       ]
     );
