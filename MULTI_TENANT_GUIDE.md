@@ -48,6 +48,10 @@ mysql -u root -p theplatform < src/database/schema.sql
 #    + backfill base rows to the "mys" tenant:
 npm run setup:tenant
 
+# 2a. (optional) Fill each tenant with demo data to showcase the platform
+npm run demo:tenant    # active event, ticket types, ~12 paid tickets,
+                       # souvenirs and sponsors per tenant (mys + icp)
+
 # 2. Start the API
 npm run dev            # http://localhost:5000
 

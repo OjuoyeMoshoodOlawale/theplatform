@@ -7,13 +7,9 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "seed": "node src/database/seed.js",
-    "demo": "node src/database/seed.demo.js",
     "db": "node -e \"import('./src/database/db.js').then(m=>m.query('SELECT 1+1 AS ok')).then(([r])=>console.log('DB OK:',r[0])).catch(e=>console.error('DB FAIL:',e.message))\"",
-    "seed:admin": "node scripts/seed-admin.js",
-    "setup:demo": "node scripts/setup-demo.js",
-    "setup": "node scripts/setup-demo.js",
     "setup:tenant": "node scripts/setup-tenant.js",
+    "demo:tenant": "node scripts/seed-tenant-demo.js",
     "test:tenant": "node scripts/test-tenant-isolation.js",
     "test:email": "node scripts/test-email.js"
   },

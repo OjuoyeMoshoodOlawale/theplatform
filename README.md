@@ -45,14 +45,23 @@ SOURCE backend/src/database/schema.sql;
 cd backend
 npm install
 cp .env.example .env
-# Edit .env with your credentials
-node src/database/seed.js    # Creates super admin
+# Edit .env: set DB_PASS, JWT_SECRET (DB_NAME is already 'theplatform')
+
+# Create the DB and load the schema
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS theplatform"
+mysql -u root -p theplatform < src/database/schema.sql
+
+npm run setup:tenant         # tenant layer + platform admin + mys/icp tenants
+npm run demo:tenant          # fill each tenant with demo data to showcase
 npm run dev
 ```
 
-**Default super admin:**
-- Email: `admin@muslimyouthsummit.com`
-- Password: `MYS@Admin2024!` ← **Change this immediately!**
+**Logins:**
+- Platform owner: `owner@theplatform.com` / `Platform@2025!` → `/platform/login`
+- MYS admin: `admin@muslimyouthsummit.com` / `MYS@Admin2024!` → `/mys/admin/login`
+- ICP admin: `admin@icp.org` / `ICP@Admin2024!` → `/icp/admin/login`
+
+> **Change all default passwords before production.**
 
 ### 3. Frontend
 
