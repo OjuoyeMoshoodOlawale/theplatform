@@ -49,11 +49,51 @@ const PORT = process.env.PORT || 5000;
 // ─── Security ───────────────────────────────────────────────
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 
+// ─── CORS ───────────────────────────────────────────────────
+// Multi-tenant platform: requests can come from localhost (dev), the apex
+// domain, www, and any tenant subdomain. A single fixed origin is not enough,
+// so we validate against an allow-list (env CSV) plus sensible defaults.
+//
+// Set CORS_ORIGINS in the backend .env as a comma-separated list, e.g.
+//   CORS_ORIGINS=https://themuhsinahacademy.com,https://www.themuhsinahacademy.com
+// Localhost dev origins are always permitted.
+const allowedOrigins = (process.env.CORS_ORIGINS || process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+const defaultDevOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4173',   // vite preview
+  'http://127.0.0.1:5173',
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin(origin, callback) {
+    // Allow same-origin / server-to-server / curl (no Origin header).
+    if (!origin) return callback(null, true);
+
+    // Always allow localhost dev origins.
+    if (defaultDevOrigins.includes(origin)) return callback(null, true);
+
+    // Allow anything explicitly listed in env.
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+
+    // Allow the production apex + any of its subdomains (tenant slugs)
+    // e.g. https://themuhsinahacademy.com, https://www.themuhsinahacademy.com,
+    //      https://mys.themuhsinahacademy.com
+    try {
+      const host = new URL(origin).hostname;
+      if (host === 'themuhsinahacademy.com' || host.endsWith('.themuhsinahacademy.com')) {
+        return callback(null, true);
+      }
+    } catch { /* malformed origin — fall through to reject */ }
+
+    return callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Tenant-Slug'],
 }));
 
 // ─── Rate Limiting ───────────────────────────────────────────
