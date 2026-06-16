@@ -10,10 +10,22 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Attach JWT from localStorage on every request
+// Reserved first-segments that are NOT tenant slugs
+const RESERVED = new Set(['platform', 'admin', 'tag', 'ticket', 'certificate', 'register', 'shop', 'check-in', 'past-events', 'api', 'p']);
+
+/** Derive the current tenant slug from the URL (first path segment). */
+const currentTenantSlug = () => {
+  const seg = window.location.pathname.split('/').filter(Boolean)[0];
+  if (!seg || RESERVED.has(seg)) return null;
+  return seg;
+};
+
+// Attach JWT + tenant slug on every request
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('mys_token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
+  const slug = currentTenantSlug();
+  if (slug) config.headers['X-Tenant-Slug'] = slug;
   return config;
 });
 
